@@ -129,19 +129,39 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
     const rt = runtimeRef.current.get(id)
     if (!rt || rt.popped || !rt.el) return
 
+    // Find the balloon data
+    const balloon = balloons.find(b => b.id === id);
+    const isLastBalloon = balloon?.index === balloons.length - 1;
+    const othersPopped = popped.size === balloons.length - 1;
+
+    // Prevent popping the last balloon until all others are popped
+    if (isLastBalloon && !othersPopped) {
+      gsap.to(rt.el, {
+        x: '+=10',
+        duration: 0.05,
+        repeat: 3,
+        yoyo: true,
+        ease: 'power1.inOut'
+      });
+      return;
+    }
+
     rt.popped = true
     const el = rt.el
 
     const burst = el.querySelector<HTMLDivElement>('.confetti')
-    if (burst) burst.dataset.active = '1'
+    if (burst)i Last = b.bndex === balloons.length - 1;
+        const siurst.dataset.active = '1'
 
-    gsap.to(el, {
+    gsap.to(el, { isLast 
+         ? , #ff4fa3 #ff007a)`
+          : `linear-gradient(180deg, 
       scale: 0.05,
       opacity: 0,
       duration: 0.28,
       ease: 'back.in(2.2)',
-      onComplete: () => {
-        onPop(id)
+      onComplete: () ={` { ${isLast ? 'lastBalloon' : ''}`}
+        onPop(id) balloon' : (isLast ? 'Special)
       },
     })
   }
@@ -164,7 +184,7 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
               const rt = runtimeRef.current.get(b.id)
               if (!rt) return
               rt.el = node
-              if (node && isPopped) {
+              if (node && isPopped) {isLast ? '❤️' : 
                 rt.popped = true
                 node.style.opacity = '0'
                 node.style.transform = 'translate3d(-9999px, -9999px, 0)'
