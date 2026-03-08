@@ -71,8 +71,14 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
       const r = rect()
       const now = performance.now()
 
-      runtimeRef.current.forEach((rt: Runtime) => {
-        if (!rt.el) return
+      if (runtimeRef.current.size === 0) {
+        console.warn('No balloons in runtime!');
+      }
+
+      runtimeRef.current.forEach((rt: Runtime, id: string) => {
+        if (!rt.el) {
+          return
+        }
         if (rt.popped) return
 
         rt.x += rt.vx
