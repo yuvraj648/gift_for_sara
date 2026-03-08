@@ -150,18 +150,15 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
     const el = rt.el
 
     const burst = el.querySelector<HTMLDivElement>('.confetti')
-    if (burst)i Last = b.bndex === balloons.length - 1;
-        const siurst.dataset.active = '1'
+    if (burst) burst.dataset.active = '1'
 
-    gsap.to(el, { isLast 
-         ? , #ff4fa3 #ff007a)`
-          : `linear-gradient(180deg, 
+    gsap.to(el, {
       scale: 0.05,
       opacity: 0,
       duration: 0.28,
       ease: 'back.in(2.2)',
-      onComplete: () ={` { ${isLast ? 'lastBalloon' : ''}`}
-        onPop(id) balloon' : (isLast ? 'Special)
+      onComplete: () => {
+        onPop(id)
       },
     })
   }
@@ -170,21 +167,24 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
     <div ref={rootRef} className="balloonField" role="application" aria-label="Balloons">
       {seeded.map((b: (BalloonData & { seed: number; s: number })) => {
         const isPopped = popped.has(b.id)
+        const isLast = b.index === balloons.length - 1;
         const size = 74 + (b.index % 4) * 10
         const glow = `hsla(${b.hue}, 95%, 65%, 0.45)`
-        const fill = `linear-gradient(180deg, hsla(${b.hue}, 98%, 74%, 1), hsla(${b.hue}, 92%, 52%, 1))`
+        const fill = isLast 
+          ? `linear-gradient(180deg, #ff4fa3, #ff007a)` 
+          : `linear-gradient(180deg, hsla(${b.hue}, 98%, 74%, 1), hsla(${b.hue}, 92%, 52%, 1))`
 
         return (
           <button
             key={b.id}
-            className="balloon"
-            aria-label={isPopped ? 'Popped balloon' : 'Balloon'}
+            className={`balloon ${isLast ? 'lastBalloon' : ''}`}
+            aria-label={isPopped ? 'Popped balloon' : (isLast ? 'Special balloon' : 'Balloon')}
             disabled={isPopped}
             ref={(node: HTMLButtonElement | null) => {
               const rt = runtimeRef.current.get(b.id)
               if (!rt) return
               rt.el = node
-              if (node && isPopped) {isLast ? '❤️' : 
+              if (node && isPopped) {
                 rt.popped = true
                 node.style.opacity = '0'
                 node.style.transform = 'translate3d(-9999px, -9999px, 0)'
@@ -201,7 +201,7 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
           >
             <div className="balloonBody">
               <div className="balloonShine" />
-              <div className="balloonLabel">{b.label}</div>
+              <div className="balloonLabel">{isLast ? '❤️' : b.label}</div>
             </div>
             <div className="balloonKnot" />
             <div className="balloonString" />
