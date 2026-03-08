@@ -71,11 +71,13 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
       const r = rect()
       const now = performance.now()
 
-      if (runtimeRef.current.size === 0) {
-        console.warn('No balloons in runtime!');
+      // If rect is 0 (not rendered yet), skip this frame
+      if (r.width === 0 || r.height === 0) {
+        rafRef.current = window.requestAnimationFrame(step)
+        return
       }
 
-      runtimeRef.current.forEach((rt: Runtime, id: string) => {
+      runtimeRef.current.forEach((rt: Runtime) => {
         if (!rt.el) {
           return
         }
@@ -87,13 +89,21 @@ export default function BalloonField({ balloons, popped, onPop }: Props) {
         const wave = Math.sin(now / 900 + rt.drift * 10) * 0.7
         rt.x += wave
 
-        if (rt.y < -120) {
-          rt.y = r.height + 120
-        }
-        if (rt.x < -80) rt.x = r.width + 80
-        if (rt.x > r.width + 80) rt.x = -80
+        // Buffer for wrap-around
+        const buffer = 100
 
-        rt.el.style.transform = `translate3d(${rt.x}px, ${rt.y}px, 0)`
+        if (rt.y < -buffer) {
+          rt.y = r.height + buffer
+        }
+        if (rt.x < -buffer) rt.x = r.width + buffer
+        if (rt.x > r.width + buffer) rt.x = -buffer
+
+        if (rt.el) {
+          rt.el.style.transform = `translate3d(${rt.x}px, ${rt.y}px, 0)`
+          // Force visibility in case GSAP/CSS didn't catch it
+          rt.el.style.opacity = '1'
+          rt.el.style.display = 'block'
+        }
       })
 
       rafRef.current = window.requestAnimationFrame(step)
