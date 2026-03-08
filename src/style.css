@@ -310,6 +310,8 @@ button {
   cursor: pointer;
   transform-origin: 50% 60%;
   touch-action: manipulation;
+  will-change: transform;
+  z-index: 15;
 }
 
 .balloon:disabled {
