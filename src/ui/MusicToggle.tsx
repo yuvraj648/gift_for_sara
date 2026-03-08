@@ -49,9 +49,9 @@ export default function MusicToggle({ src }: Props) {
       onClick={() => setEnabled((v: boolean) => !v)}
       disabled={!ready}
       aria-label={label}
-      title={!ready ? 'Add /public/music.mp3 to enable' : label}
+      title={!ready ? 'Please add music.mp3 to public folder' : label}
     >
-      {enabled ? '♪ On' : '♪ Off'}
+      {ready ? (enabled ? '♪ On' : '♪ Off') : 'No Music'}
     </button>
   )
 }

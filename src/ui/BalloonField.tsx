@@ -1,6 +1,12 @@
 import { useEffect, useMemo, useRef } from 'react'
 import gsap from 'gsap'
 
+// Register GSAP plugins if needed (not strictly required for basic to/from)
+// but helpful for ensuring GSAP is initialized in the bundle
+gsap.config({
+  nullTargetWarn: false,
+});
+
 export type BalloonData = {
   id: string
   index: number
